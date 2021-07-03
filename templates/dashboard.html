@@ -1,0 +1,87 @@
+{% include 'common/header.html' %}
+<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        
+        Jadwal Perkuliahan
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Dashboard</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <!-- Small boxes (Stat box) -->
+      {% for row in rv %}
+      <div class="row">
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          
+          <form class="form-horizontal" id="Form1" method="POST" action="/presensiMahasiswa3" target="_blank">
+              {% if row[3] == '1': %}
+              <div class="small-box bg-aqua">
+                <div class="inner">
+              <h3>Senin</h3>
+              <input style="display: none;" type="text" class="form-control" value="Senin" name="hari">
+              {% elif row[3] == '2': %}
+              <div class="small-box bg-green">
+                <div class="inner">
+              <h3>Selasa</h3>
+              <input style="display: none;" type="text" class="form-control" value="Selasa" name="hari">
+              {% elif row[3] == '3': %}
+              <div class="small-box bg-yellow">
+                <div class="inner">
+              <h3>Rabu</h3>
+              <input style="display: none;" type="text" class="form-control" value="Rabu" name="hari">
+              {% elif row[3] == '4': %}
+              <div class="small-box bg-purple">
+                <div class="inner">
+              <h3>Kamis</h3>
+              <input style="display: none;" type="text" class="form-control" value="Kamis" name="hari">
+              {% elif row[3] == '5': %}
+              <div class="small-box bg-brown">
+                <div class="inner">
+              <h3>Jumat</h3>
+              <input style="display: none;" type="text" class="form-control" value="Jumat" name="hari">
+              {% elif row[3] == '6': %}
+              <div class="small-box bg-orange">
+                <div class="inner">
+              <h3>Sabtu</h3>
+              <input style="display: none;" type="text" class="form-control" value="Sabtu" name="hari">
+              {% elif row[3] == '7': %}
+              <div class="small-box bg-red">
+                <div class="inner">
+              <h3>Minggu</h3>
+              <input style="display: none;" type="text" class="form-control" value="Minggu" name="hari">
+              {% else: %}
+              <h3>Tidak Ada Hari</h3>
+              {% endif %}
+
+              <p>{{row[2]}} - {{row[5]}}</p>
+              <input style="display: none;" type="text" class="form-control" value="{{row[2]}} - {{row[5]}}" name="jam">
+              <input style="display: none;" type="text" class="form-control" value="{{row[6]}}" name="kelas">
+              <input style="display: none;" type="text" class="form-control" value="{{row[0]}}" name="kd_kuliah">
+              
+              
+            </div>
+            <div class="icon">
+              <i class="fa fa-calendar"></i>
+            </div>
+            <input style="display: none;" type="text" class="form-control" value="{{row[4]}}" name="matkul">
+            <a class="small-box-footer" style="color: #000000">{{row[4]}}<button type="submit" class="small-box-footer"><i class="fa fa-arrow-circle-right"></i></button> </a>
+            
+          </div>
+          </form>
+          
+        </div>
+     
+        {% endfor %}
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+{% include 'common/footer.html' %}

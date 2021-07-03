@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Unauthorized Access:: Flask App</title>
+  
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='jumbotron/jumbotron.css') }}">
+    <link rel="stylesheet" href="../static/style.css">
+    <link href="/static/signup.css" rel="stylesheet">
+    <script src="/static/js/jquery-3.4.1.min.js" rel="stylesheet"></script>
+       
+  </head>
+
+  <body>
+
+    <div class="container">
+      <div class="header">
+        <nav>
+           <ul class="nav nav-pills pull-right">
+              <li role="presentation"><a href="/">Kembali</a>
+              </li>
+              
+          </ul>
+        </nav>
+        
+      </div>
+
+      <div class="jumbotron">
+        <h1>{{error}}</h1>        
+      </div>
+      
+      <footer class="footer">
+        <p>©Yoga Ganteng</p>
+      </footer>
+
+    </div>
+  </body>
+</html>

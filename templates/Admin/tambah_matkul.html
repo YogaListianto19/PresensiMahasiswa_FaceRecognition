@@ -1,0 +1,58 @@
+{% block content %}	
+			<div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">Tambah Mata Kuliah</h3>
+        </div>
+        <br>
+        <form role="form" action="/saveTambahMatkul" method="POST">
+          <div class="box-body">
+            <div class="form-group">
+              <label>Id Perwalian :</label>
+              <input style="width: 250px" type="text" class="form-control" value="{{ id }}" name="id" readonly>
+              <br>
+
+              <label>Npm Mahasiswa :</label>
+              <input style="width: 250px" type="text" class="form-control" value="{{ npm }}" name="npm" readonly>
+              <br>
+
+              <label>Mata Kuliah :</label>      
+              <select class="form-control" style="width: 250px" id="matkul" name="matkul">
+                <option></option>
+                {% for row in mk %}
+                <option data-id="{{ row[0] }}" data-sks="{{row[5]}}" value="{{row[0]}}">{{ row[1] }} {{row[4]}}</option>
+                {% endfor %}
+                
+              </select>
+              <br>
+              <label>Jumlah SKS :</label>
+              <input style="width: 250px" type="text" class="form-control" id="sks" name="sks" readonly>
+              
+                    
+            </div>
+            <div class="card-footer">
+              <button type="Submit" class="btn btn-info">Submit</button>
+              <button id="cancelBtnEdit" type="button" class="btn btn-default float-right">Cancel</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      
+
+
+<script>
+$('#cancelBtnEdit').click(function(){
+  $('#editForm').fadeOut();
+  $('#addForm').fadeOut();
+  $('#editForm').empty();
+  $('#addBtn').fadeIn();
+  $('#table').fadeIn();
+});
+
+$("#matkul").on("change", function(){
+  var d_sks = $("#matkul option:selected").attr("data-sks");
+  $('#sks').val(d_sks);
+});
+
+</script>
+{% endblock %}

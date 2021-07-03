@@ -1,0 +1,19 @@
+komputer hanya bisa mengolah angka, tetapi tidak menghilangkan
+karakteristik data kita
+
+bluring bisa menghilangkan noise atau titik2 yg mengganggu dalam gambar
+haar like fitur algoritma, adalah mengambil fitur penting dari wajah manusia
+, yg melakukan operasi matriks
+
+nah setelah mendapatkan fitur2 yg mereperentasikan wajah tadi, lalu akan dilakukan
+cascading, disini adalah mentraining model, menggunakan ribuan positive sample,
+yg dimaksud positive sample itu adalah ada wajahnya ketika dideteksi
+
+haar-cascade detection adalah salah satu algoritma yg ada di opencv untuk
+mendeteksi wajah, ada kekurangan dalam algoritma ini adalah disini, si wajah
+harus berada dalam jarak yg pas dengan kamera karena jika terlalu dekat, akan
+susah mendeteksi bagian wajahnya, dan jika terlalu jauh pun hanya akan 
+dianggap background wajah tersebut
+
+19065969180
+

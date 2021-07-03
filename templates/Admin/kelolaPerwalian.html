@@ -1,0 +1,318 @@
+{% include 'common/header.html' %}
+
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Data Perwalian
+        <small>CRUD Data</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li class="fa fa-dashboard"> Home</li>
+        
+        <li class="active">Data tables</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+    <div class="row">
+      <div class="col-12">
+
+        <div class="box-body">
+          <div class="card-header">
+            <h3 class="card-title">Data Perwalian</h3>
+            <div class="card-tools">
+              <div class="input-group input-group-sm" style="width: 95px;">
+                  <button id="addBtn" class="btn btn-success btn-sm"><i class="fa fa-plus" ></i> Add New</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12" id="loadBar" style="display: none;">
+            <br>
+            <center><i class="fa fa-spinner fa-spin"></i></center>
+          </div>
+
+          <div class="col-md-10" id="addForm" style="display: none;">
+          <div class="box box-primary">
+              <div class="box-header with-border">
+                <h3 class="box-title">Add New</h3>
+              </div>
+              <br>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form role="form" action="/savePerwalian" method="post">
+                <div class="box-body">
+                  <div class="form-group">
+                    <label>Npm Mahasiswa :</label>
+                    <select class="form-control" style="width: 250px" name="p_npm">
+                      <option></option>
+                      {% for row in va %}
+                      <option value="{{ row[1] }}">{{ row[1] }} {{row[2]}}</option>
+                      {% endfor %}
+                    </select>  
+                    <br>
+
+                    <label>Semester :</label>
+                    <select class="form-control" style="width: 250px" name="p_semester">
+                      <option value="1">Semester 1</option>
+                      <option value="2">Semester 2</option>
+                      <option value="3">Semester 3</option>
+                      <option value="4">Semester 4</option>
+                      <option value="5">Semester 5</option>
+                      <option value="6">Semester 6</option>
+                      <option value="7">Semester 7</option>
+                      <option value="8">Semester 8</option>
+                    </select>
+                    <br>
+
+                    <label>Tahun Ajaran :</label>
+                    <input style="width: 250px" type="text" class="form-control" name="thn_ajaran" onkeypress="return hanyaAngka(event)" maxlength="4" placeholder="Masukan Tahun Ajaran" required>
+                    <br>
+
+                    <label>Konsentarsi :</label>
+                    <select class="form-control" style="width: 250px" name="p_konsentrasi">
+                      <option value="0">Tidak ada konsentrasi</option>
+                      <option value="1">Computer Network Security (CNS)</option>
+                      <option value="2">Creative Information Development (CID)</option>
+                    </select>
+                    </div>
+                  </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-info">Submit</button>
+                  <button id="cancelBtn" type="button" class="btn btn-default float-right">Cancel</button>
+                </div>
+                <!-- /.card-footer -->
+              </form>
+            </div>
+        </div>
+
+        <div id="editForm">
+          {% block content %}
+          {% endblock %}
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="box">
+              <div class="box-header" id="tabelJudul">
+                <h3 class="box-title">Tabel Perwalian</h3>
+
+                <div class="box-tools">
+                  <div class="input-group input-group-sm" style="width: 150px;">
+                    <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+
+                    <div class="input-group-btn">
+                      <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+               <!-- /.box-header -->
+              <div class="box-body" id="table">
+                <table id="example1" class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Id Perwalian</th>
+                    <th>NPM</th>
+                    <th>Nama Mahasiswa</th>
+                    <th>Semester</th>
+                    <th>Kode Tahun Ajaran</th>
+                    <th>Konsentrasi</th>
+                    <th>Kelola Mata Kuliah</th>
+                  </tr>
+                    </thead>
+                    <tbody>
+                      {% for row in mhs %}
+                      <tr>
+                          <!-- <td>{{ row[0] }}</td> -->
+                          <td>{{ row[0] }}</td>
+                          <td>{{ row[1] }}</td>
+                          <td>{{ row[7] }}</td>
+                          <td>{{ row[2] }}</td>
+                          <td>{{ row[3] }}</td>
+                          {% if row[4] == 1: %}
+                          <td>Computer Network Security (CNS)</td>
+                          {% elif row[4] == 2: %}
+                          <td>Creative Information Development (CID)</td>
+                          {% else: %}
+                          <td>Tidak ada konsentrasi</td>
+                          {% endif %}
+                          <td class="text-center">
+                              <button class="btn btn-primary" onclick="tambahMatkul({{row[0]}},{{row[3]}},{{row[2]}},{{row[1]}})" data-toggle="tooltip" title="Tambah MatKul"><i class="fa fa-plus"></i></button>
+                              <a class="btn btn-warning" href="#modalReadData{{ row[0] }}" data-toggle="modal" title="Lihat MatKul"><i class=" fa fa-search"></i></a>
+                              <button class="btn btn-danger" onclick=""><i class="fa fa-trash"></i></button>
+                          </td>
+
+                      </tr>
+
+                      {% endfor %}
+                    </tbody>
+                  </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+
+          
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+{% include 'common/footer.html' %}
+
+<!--Modal -->
+<!-- jQuery 3 -->
+
+
+<link rel="stylesheet" href="{{ url_for('static', filename='theme/bower_components/bootstrap/dist/css/bootstrap.min.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='theme/bower_components/font-awesome/css/font-awesome.min.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='theme/bower_components/Ionicons/css/ionicons.min.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='theme/dist/css/AdminLTE.min.css')}}">
+<link rel="stylesheet" href="{{ url_for('static', filename='theme/dist/css/skins/_all-skins.min.css')}}">
+
+
+<!-- page script -->
+<script src="{{ url_for('static', filename='theme/bower_components/jquery/dist/jquery.min.js')}}"></script>
+<script src="{{ url_for('static', filename='theme/bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
+<script src="{{ url_for('static', filename='theme/bower_components/fastclick/lib/fastclick.js')}}"></script>
+<script src="{{ url_for('static', filename='theme/dist/js/adminlte.min.js')}}"></script>
+<!-- DataTables -->
+<!-- <script src="{{ url_for('static', filename='theme/bower_components/datatables.net/js/jquery.dataTables.min.js')}}"></script> -->
+<!-- <script type="text/javascript" src="{{ url_for('static', filename='theme/bower_components/jquery-ui/jquery-ui.js')}}"></script> -->
+<!-- <script type="text/javascript" src="{{ url_for('static', filename='theme/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js')}}"></script> -->
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script type="text/javascript">
+
+  $(function () {
+    $("#example1").DataTable();
+  });
+
+  function tambahMatkul(id,thn,sem,npm){
+    $.ajax({
+      url: '/tambahMatkul/'+id+'/'+thn+'/'+sem+'/'+npm,
+      type:'GET',
+      dataType:'HTML',
+      beforeSend:function(){
+        $('#editForm').empty();
+        $('#addBtn').fadeOut();
+        $('#loadBar').show();
+      },
+      success:function(data){
+        $('#loadBar').hide();
+        $('#addForm').fadeOut();
+        $('#table').fadeOut();
+        $('#editForm').append(data);
+        $('#editForm').fadeIn();
+      },
+      error:function(data) {
+        $('#loadBar').hide();
+        //alert(url+'/'+id);
+        alert(data);
+        alert('500 : Internal server error');
+
+      }
+
+    });
+  }
+
+
+  $('#cancelBtn').click(function(){
+    $('#editForm').fadeOut();
+    $('#editForm').empty();
+    $('#addBtn').fadeIn();
+  });
+
+  $('#addBtn').click(function(){
+    $('#addBtn').fadeOut();
+    $('#table').fadeOut();
+    $('#addForm').fadeIn();
+  });
+
+  $('#cancelBtn').click(function(){
+    $('#addForm').fadeOut();
+    $('#table').fadeIn();
+  });
+
+  function hanyaAngka(evt) {
+  	var charCode = (evt.which) ? evt.which : event.keyCode
+  	if (charCode > 31 && (charCode < 48 || charCode > 57))
+  		return false;
+  	return true;
+  }
+
+
+
+</script>
+
+
+<!-- ============ MODAL EDIT HAK =============== -->
+{% for row in mhs %}
+    <div class="modal modal-info fade" id="modalReadData{{ row[0] }}">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Lihat Mata Kuliah</h4>
+            </div>
+              <div class="modal-body">
+                  <div class="control-group">
+                      <label class="control-label" >NPM</label>
+                      <div class="controls">
+                          <input style="width: 150px; color: #000000;" value="{{ row[1] }}" readonly="true">
+                      </div>
+                  </div>
+
+                  <div class="control-group">
+                      <label class="control-label" >Nama Mahasiswa</label>
+                      <div class="controls">
+                          <input style="width: 200px; color: #000000;" type="text" value="{{ row[7] }}" required>
+                      </div>
+                  </div>
+
+                  <!-- <div class="control-group">
+                      <label class="control-label" >Tanggal Lahir</label>
+                      <div class="controls">
+                      	<i class="fa fa-calendar"></i>
+                          <input style="width: 100px" name="p_tgl" type="text" class="input-tanggal" value="{{ row[3] }}" required>
+                      </div>
+                  </div>
+
+                  <div class="control-group">
+                      <label class="control-label" >Tempat Lahir</label>
+                      <div class="controls">
+                          <input style="width: 400px" name="p_tempat" type="text" value="{{ row[4] }}" required>
+                      </div>
+                  </div>
+
+                  <div class="control-group">
+                      <label class="control-label" >No Telp</label>
+                      <div class="controls">
+                          <input style="width: 400px" name="p_telp" type="text" onkeypress="return hanyaAngka(event)" maxlength="13" value="{{ row[18] }}" required>
+                      </div>
+                  </div> -->
+
+              </div>
+              <div class="modal-footer">
+                  <button class="btn btn-outline pull-left" data-dismiss="modal" aria-hidden="true">Close</button>
+              </div>
+          
+      </div>
+    </div>
+</div>
+
+{% endfor %}

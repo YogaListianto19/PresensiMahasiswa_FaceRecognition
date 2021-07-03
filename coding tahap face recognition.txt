@@ -1,0 +1,81 @@
+#Membuat DAta set
+def dataset(npm):
+	
+    i=0   
+    offset=50  
+    while True:
+        rval, frame = video.read()
+        gray= cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        faces = faceDetect.detectMultiScale(gray, 1.2, minNeighbors=5, minSize=(100, 100));
+        # url = 'dataset/%s/' % (path)
+        url = 'dataset/'
+        for(x,y,w,h) in faces:
+            i=i+1
+            cv2.rectangle(frame,(x-50,y-50),(x+w+50,y+h+50),(225,0,0),2)
+            cv2.imwrite(url+"face-"+npm +'.'+ str(i) + ".jpg", gray[y-offset:y+h+offset,x-offset:x+w+offset])
+        
+        if i>4:
+            #video.release()
+            #cv2.destroyAllWindows()
+            #alert("Sukses")           
+            return render_template('Admin/facedetection.html', value='on', value2='%sface-%s.1.jpg' %(url,npm))
+            break
+
+
+#Training dataset
+def getImageWithId(path):
+    imagePaths=[os.path.join(path,f) for f in os.listdir(path)]
+    images=[]
+    labels=[]
+    i = 0
+    while i < len(imagePaths):
+        faceImg=Image.open(imagePaths[i]).convert('L');
+        faceNp=np.array(faceImg, 'uint8')
+        nbr = int(os.path.split(imagePaths[i])[1].split(".")[0].replace("face-", ""))
+        print (nbr)
+        faces = faceDetect.detectMultiScale(faceNp)
+        for (x, y, w, h) in faces:
+            images.append(faceNp[y: y + h, x: x + w])
+            labels.append(nbr)
+            cv2.imshow("Training", faceNp[y: y + h, x: x + w])
+            cv2.waitKey(10)
+        i += 1
+    return np.array(images), np.array(labels)
+
+@app.route('/trainDS')
+def trainDS():
+    path = 'dataset'
+    imagePaths=[os.path.join(path,f) for f in os.listdir(path)]
+    # i=0
+    # while i < len(imagePaths):  
+    images, labels = getImageWithId(path)
+        # i += 1
+    cv2.imshow('test', images[0])
+    cv2.waitKey(1)
+    rec.train(images, np.array(labels))
+    rec.save('recognizer/trainningData1.yml')
+    cv2.destroyAllWindows()
+    return json.dumps({'message':'Train face created successfully !'})
+
+#Face Recognition
+def facerecog2():
+    while True:
+        
+        rval, frame = video.read()
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        faces = faceDetect.detectMultiScale(gray, 1.2, minNeighbors=5, minSize=(100,100))
+        current = datetime.now()
+        v_tanggal = current.strftime('%Y-%m-%d')
+        for (x,y,w,h) in faces:
+            cv2.rectangle(frame,(x,y),(x+w,y+h),(255,0,0),2)
+            Id,conf=rec.predict(gray[y:y+h, x:x+w])
+            sql = "UPDATE ms_absensi SET st_hadir=%s WHERE str_npm=%s AND tanggal=%s"
+            value = ("1", Id, v_tanggal)
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql,value)
+            conn.commit()
+            cv2.putText(frame,str(Id),(x,y+h),fontface,fontscale,fontcolor,2)
+            cv2.imwrite('t.jpg', frame)
+            yield (b'--frame\r\n'
+                b'Content-Type: image/jpeg\r\n\r\n' + open('t.jpg', 'rb').read() + b'\r\n')
